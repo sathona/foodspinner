@@ -1,0 +1,79 @@
+<html lang="">
+<head>
+  <title>Ruoka Wheel of Fortune</title>
+  <link rel="stylesheet" href="style.css" type="text/css" />
+  <script type="text/javascript" src="Winwheel.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+</head>
+<body>
+<div align="center">
+  <h1>Ruoka Wheel of Fortune</h1>
+  <table cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td>
+        <div class="power_controls">
+          <img id="spin_button" src="spin_off.png" alt="Spin" onClick="startSpin();" />
+          <br /><br />
+          &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Reset</a><br />
+        </div>
+      </td>
+      <td width="438" height="582" class="the_wheel" align="center" valign="center">
+        <canvas id="canvas" width="434" height="434">
+          <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+        </canvas>
+      </td>
+    </tr>
+  </table>
+  <script>
+    const options = [
+      {"fillStyle" : "#ee1c24", "text" : "Salimar"},
+      {"fillStyle" : "#3cb878", "text" : "Subway"},
+      {"fillStyle" : "#f6989d", "text" : "Sakuragawa"},
+      {"fillStyle" : "#00aef0", "text" : "Kahvio + Eväät"},
+      {"fillStyle" : "#f26522", "text" : "Kebab House"},
+      {"fillStyle": "#ff55b8", "text": "Michi Asia Cuisine"}
+    ];
+
+    let theWheel = new Winwheel({
+      "outerRadius": 212,
+      "innerRadius": 75,
+      "textFontSize": 14,
+      "textOrientation": "horizontal",
+      "textAlignment": "outer",
+      "numSegments": options.length,
+      "segments": options,
+      "animation": {
+        "type"     : "spinToStop",
+        "duration" : 10,
+        "spins"    : 3,
+        "callbackFinished" : alertPrize,
+        "callbackSound"    : playSound,
+        "soundTrigger"     : "pin"
+      },
+      "pins": {
+        "number": options.length,
+        "fillStyle": "silver",
+        "outerRadius": 4,
+      }
+    });
+
+    let audio = new Audio("tick.mp3");
+    function playSound() {audio.pause();audio.currentTime = 0;audio.play();}
+
+    let wheelSpinning = false;
+
+    document.getElementById("spin_button").src = "spin_on.png";
+    document.getElementById("spin_button").className = "clickable";
+
+    function startSpin() {if (wheelSpinning === false) {theWheel.animation.spins = 10;document.getElementById("spin_button").src = "spin_off.png";document.getElementById("spin_button").className = "";theWheel.startAnimation();wheelSpinning = true;}}
+    function resetWheel() {document.getElementById("result").innerHTML = `<h1 id="result"></h1>`;theWheel.stopAnimation(false);theWheel.rotationAngle = 0;theWheel.draw();document.getElementById("spin_button").src = "spin_on.png";document.getElementById("spin_button").className = "clickable";wheelSpinning = false;}
+
+    function alertPrize(indicatedSegment)
+    {
+      document.getElementById("result").innerHTML = `<h1 id="result">Mene syömään paikkaan: <span style="color: ${indicatedSegment.fillStyle}">${indicatedSegment.text}</span></h1>`;
+    }
+  </script>
+</div>
+<h1 id="result"></h1>
+</body>
+</html>
