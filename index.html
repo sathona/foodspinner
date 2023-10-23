@@ -37,8 +37,6 @@
       {"fillStyle": "#ffeeee", "text": "Thai Street Food"},
       {"fillStyle": "#ff0000", "text": "ALL IN Teppanyaki"}
     ];
-    
-    options(shuffle);
 
     function shuffle(array) {
       let currentIndex = array.length,  randomIndex;
@@ -51,6 +49,8 @@
       return array;
     }
 
+    shuffle(options);
+    
     let theWheel = new Winwheel({
       "outerRadius": 212,
       "innerRadius": 75,
